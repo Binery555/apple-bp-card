@@ -1,19 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title>Untitled</title>
-  
-
-</head>
-<body>
-<!-- partial:index.partial.html -->
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Futures Assets Mockup — with 6M Trend Profit Cards + Share → (NEW) Extra Compact Profit Card (7cm gap)</title>
+  <title>Futures Assets Mockup — with 6M Trend Profit Cards + Share → (NEW) Extra Compact Profit Card (12cm gap)</title>
 
   <!-- Fonts & Icons -->
   <link href="https://db.onlinewebfonts.com/c/d05c19ccecf7003d248c60ffd6b5e8f7?family=Binance+PLEX" rel="stylesheet"/>
@@ -839,7 +829,7 @@
       document.body.removeChild(probe);
       return px;
     }
-    const GAP_CM = 7.0; // ← PROFIT CARD NOW ~7 cm ABOVE THE SHARE SHEET
+    const GAP_CM = 12.0; // ← PROFIT CARD NOW ~12 cm ABOVE THE SHARE SHEET
 
     const elSide = document.getElementById('pcardSide');
     const elLev  = document.getElementById('pcardLev');
@@ -883,7 +873,7 @@
       overlay.classList.add('show');
       overlay.setAttribute('aria-hidden', 'false');
 
-      // Position card ~7cm above the sheet
+      // Position card ~12cm above the sheet
       requestAnimationFrame(()=>{ positionCardAboveSheet(); });
     }
 
@@ -930,9 +920,5 @@
     unrealEl.textContent = "Loading…";
     realizedSpan.textContent = "Loading…";
   </script>
-</body>
-</html>
-<!-- partial -->
-  
 </body>
 </html>
