@@ -212,8 +212,8 @@
       font-variant-numeric: tabular-nums;
       overflow:hidden;
     }
-    .pcard .inner { transform: translateX(0.8cm); }
-    .pcard .header{ display:flex;align-items:flex-start;gap:3px;margin-bottom:0.35cm; transform: translateX(-0.5cm); }
+    .pcard .inner { transform: translateX(0.8cm); } /* default, will be overridden by tweak below */
+    .pcard .header{ display:flex;align-items:flex-start;gap:3px;margin-bottom:0.35cm; transform: translateX(-0.5cm); } /* default, overridden below */
     .pcard .binance-logo{width:11px;height:11px;margin-top:-1px;}
     .pcard .text-block{display:flex;flex-direction:column;margin-top:-1px;}
     .pcard .binance-text{font-weight:800;font-size:.45rem;color:#f0b90b;letter-spacing:.25px;}
@@ -248,6 +248,33 @@
     .share-icon{ width:56px; height:56px; background-color:#3b3c45; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:8px; font-size:22px; }
     .cancel-btn{ text-align:center; padding:14px 0; font-size:16px; color:#cfcfd2; border-top:1px solid #3d3e48; }
     .instagram-icon{ background: radial-gradient(circle at 30% 30%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285AEB 90%); color:#fff; }
+  </style>
+
+  <!-- ✅ Your requested tweaks (kept separate so the rest stays untouched) -->
+  <style id="profit-card-tweaks-2025-09-01">
+    /* Green numbers bigger (only inside the profit card) */
+    .pcard .percentage.green{
+      font-size: 1.6rem;  /* was ~1.2rem */
+      font-weight: 900;
+    }
+    .pcard .value.green{
+      font-size: 20px;    /* was 18px via .value.green */
+      font-weight: 800;
+    }
+
+    /* Shift everything (letters/numbers/QR/logo) slightly to the left */
+    .pcard .inner{
+      transform: translateX(0.50cm);   /* was 0.8cm → move ~3mm left */
+    }
+    .pcard .header{
+      transform: translateX(-0.60cm);  /* was -0.5cm → nudge ~1mm more left */
+    }
+    .pcard .price-section{
+      transform: translateX(-0.15cm);  /* entry/last lines a touch left */
+    }
+    .pcard .referral-section{
+      transform: translateX(-0.15cm);  /* QR + referral text a touch left */
+    }
   </style>
 </head>
 <body>
@@ -488,7 +515,8 @@
 
     const amountEl = document.getElementById("amount");
     const walletEl = document.getElementById("walletValue");
-    const unrealEl = document.getElementById("unrealizedValue");
+    the_unreal = document.getElementById("unrealizedValue"); // keep id name but avoid reserved
+    const unrealEl = the_unreal;
     const realizedSpan = document.getElementById("realizedSpan");
     const eye = document.getElementById("eyeToggle");
 
