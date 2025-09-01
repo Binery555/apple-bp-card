@@ -212,8 +212,8 @@
       font-variant-numeric: tabular-nums;
       overflow:hidden;
     }
-    .pcard .inner { transform: translateX(0.8cm); } /* default, will be overridden by tweak below */
-    .pcard .header{ display:flex;align-items:flex-start;gap:3px;margin-bottom:0.35cm; transform: translateX(-0.5cm); } /* default, overridden below */
+    .pcard .inner { transform: translateX(0.8cm); }
+    .pcard .header{ display:flex;align-items:flex-start;gap:3px;margin-bottom:0.35cm; transform: translateX(-0.5cm); }
     .pcard .binance-logo{width:11px;height:11px;margin-top:-1px;}
     .pcard .text-block{display:flex;flex-direction:column;margin-top:-1px;}
     .pcard .binance-text{font-weight:800;font-size:.45rem;color:#f0b90b;letter-spacing:.25px;}
@@ -250,31 +250,14 @@
     .instagram-icon{ background: radial-gradient(circle at 30% 30%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285AEB 90%); color:#fff; }
   </style>
 
-  <!-- ✅ Your requested tweaks (kept separate so the rest stays untouched) -->
+  <!-- ✅ Tweaks: bigger green numbers + left shift -->
   <style id="profit-card-tweaks-2025-09-01">
-    /* Green numbers bigger (only inside the profit card) */
-    .pcard .percentage.green{
-      font-size: 1.6rem;  /* was ~1.2rem */
-      font-weight: 900;
-    }
-    .pcard .value.green{
-      font-size: 20px;    /* was 18px via .value.green */
-      font-weight: 800;
-    }
-
-    /* Shift everything (letters/numbers/QR/logo) slightly to the left */
-    .pcard .inner{
-      transform: translateX(0.50cm);   /* was 0.8cm → move ~3mm left */
-    }
-    .pcard .header{
-      transform: translateX(-0.60cm);  /* was -0.5cm → nudge ~1mm more left */
-    }
-    .pcard .price-section{
-      transform: translateX(-0.15cm);  /* entry/last lines a touch left */
-    }
-    .pcard .referral-section{
-      transform: translateX(-0.15cm);  /* QR + referral text a touch left */
-    }
+    .pcard .percentage.green{ font-size:1.6rem; font-weight:900; }
+    .pcard .value.green{ font-size:20px; font-weight:800; }
+    .pcard .inner{ transform: translateX(0.50cm); }
+    .pcard .header{ transform: translateX(-0.60cm); }
+    .pcard .price-section{ transform: translateX(-0.15cm); }
+    .pcard .referral-section{ transform: translateX(-0.15cm); }
   </style>
 </head>
 <body>
@@ -515,8 +498,7 @@
 
     const amountEl = document.getElementById("amount");
     const walletEl = document.getElementById("walletValue");
-    the_unreal = document.getElementById("unrealizedValue"); // keep id name but avoid reserved
-    const unrealEl = the_unreal;
+    const unrealEl = document.getElementById("unrealizedValue");
     const realizedSpan = document.getElementById("realizedSpan");
     const eye = document.getElementById("eyeToggle");
 
@@ -726,7 +708,7 @@
         </div>`;
       const node = panel;
 
-      // SHARE → open overlay (profit card + sheet)
+      // SHARE → open overlay (profit card + sheet). Snapshot exact current values.
       node.querySelector('.share').addEventListener('click', () => openProfitCardOverlay({
         sym, leverage, entry, mark, usedMargin, effMargin, mmr, qty, side
       }));
@@ -875,7 +857,7 @@
     }
 
     function openProfitCardOverlay(t){
-      // Populate card
+      // Snapshot current values at CLICK time → freeze on card
       const pnl = (t.side === 'LONG') ? upnlLong(t.mark, t.entry, t.qty) : upnlShort(t.mark, t.entry, t.qty);
       const roi = roiPct(pnl, t.usedMargin);
 
@@ -897,11 +879,8 @@
       elRef.textContent = REF_CODE;
       elQR.src = `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(REF_CODE)}`;
 
-      // Show overlay
       overlay.classList.add('show');
       overlay.setAttribute('aria-hidden', 'false');
-
-      // Position card ~10.5cm above the sheet
       requestAnimationFrame(()=>{ positionCardAboveSheet(); });
     }
 
@@ -924,7 +903,8 @@
     /* ===== INIT ===== */
     (async function init(){
       sizeFeed();
-      let marginBalanceTarget, realizedTodayPct, realizedTodayUSD;
+
+      // ✅ IMPORTANT: write to GLOBALS (no 'let' re-declare) so refreshTop uses updated values
       marginBalanceTarget = Math.round(((BAL_MIN + Math.random()*(BAL_MAX - BAL_MIN)) + Number.EPSILON) * 100) / 100;
       realizedTodayPct = REALIZED_MIN_PCT + Math.random()*(REALIZED_MAX_PCT - REALIZED_MIN_PCT);
       realizedTodayUSD = marginBalanceTarget * (realizedTodayPct/100);
@@ -943,6 +923,7 @@
       connectFuturesMarkWS();
     })();
 
+    // Initial loading placeholders
     amountEl.textContent = "Loading…";
     walletEl.textContent = "Loading…";
     unrealEl.textContent = "Loading…";
